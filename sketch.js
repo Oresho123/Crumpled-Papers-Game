@@ -1,67 +1,65 @@
-var helicopterIMG, helicopterSprite, packageSprite,packageIMG;
-var packageBody,ground
-var box,box2,box3
+
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
+const Render = Matter.Render;
+var dustbinObj, paperObject,groundObject	
+var world;
 
-function preload()
-{
-	helicopterIMG=loadImage("helicopter.png")
-	packageIMG=loadImage("package.png")
-}
 
 function setup() {
-	createCanvas(800, 700);
+	createCanvas(1600, 700);
 	rectMode(CENTER);
-	packageSprite=createSprite(width/2, 80, 10,10);
-	packageSprite.addImage(packageIMG)
-	packageSprite.scale=0.2
-
-	helicopterSprite=createSprite(width/2, 200, 10,10);
-	helicopterSprite.addImage(helicopterIMG)
-	helicopterSprite.scale=0.6
-
-box=createSprite(450,620,10,90)
-box2=createSprite(380,655,130,10)
-box3=createSprite(310,620,10,90)
-
-	groundSprite=createSprite(width/2, height-35, width,10);
-	groundSprite.shapeColor=color('green')
-
+	dustbinObj=loadImage("TrashcanIMG2")
 
 	engine = Engine.create();
 	world = engine.world;
-
-	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:0.5, isStatic:true});
-	World.add(world, packageBody);
+	dustbinObj=new dustbin(1200,650);
+	paperObject=new paper(200,450,40);
+	groundObject=new ground(width/2,670,width,20);
+	//Create a Ground
 	
 
-	//Create a Ground
-	ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
- 	World.add(world, ground);
-
+	var render = Render.create({
+	  element: document.body,
+	  engine: engine,
+	  options: {
+	    width: 1200,
+	    height: 700,
+	    wireframes: false
+	  }
+	});
 
 	Engine.run(engine);
+	//Render.run(render);
   
 }
 
 
 function draw() {
   rectMode(CENTER);
-  background('blue');
-  packageSprite.x= packageBody.position.x 
-  packageSprite.y= packageBody.position.y 
-  drawSprites();
+  background(0);
+ 
+  dustbinObj.display();
+  paperObject.display();
+  groundObject.display();
+  
+ 
+  
+  
  
 }
 
 function keyPressed() {
- if (keyCode === DOWN_ARROW) {
-   Matter.Body.setStatic(packageBody,false);
- }
-  }
+  	if (keyCode === UP_ARROW) {
+
+    	Matter.Body.applyForce(paperObject.body,paperObject.body.position,{x:85,y:-85});
+    
+  	}
+}
+
+
 
 
 
